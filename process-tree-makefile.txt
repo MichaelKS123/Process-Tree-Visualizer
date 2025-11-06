@@ -1,0 +1,43 @@
+# Makefile for Process Tree Visualizer
+# Created by: Michael Semera
+# Platform: Linux/macOS
+
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+TARGET = process_tree
+SOURCE = process_tree.cpp
+
+# Platform-specific flags
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    LDFLAGS =
+endif
+ifeq ($(UNAME_S),Darwin)
+    LDFLAGS = -framework CoreFoundation
+endif
+
+.PHONY: all clean install
+
+all: $(TARGET)
+
+$(TARGET): $(SOURCE)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCE) $(LDFLAGS)
+	@echo "Build complete! Run with: ./$(TARGET)"
+
+clean:
+	rm -f $(TARGET)
+	@echo "Cleaned build files"
+
+install: $(TARGET)
+	cp $(TARGET) /usr/local/bin/
+	@echo "Installed to /usr/local/bin/"
+
+help:
+	@echo "Process Tree Visualizer - Build System"
+	@echo "Created by: Michael Semera"
+	@echo ""
+	@echo "Targets:"
+	@echo "  make          - Build the application"
+	@echo "  make clean    - Remove build files"
+	@echo "  make install  - Install to /usr/local/bin"
+	@echo "  make help     - Show this help message"
